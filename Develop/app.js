@@ -11,31 +11,93 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 ​
 ​let devTeam = [];
+
+const employeeTypeInquiry = [
+    {
+      type: "list",
+      message: "Select Employee's Job Type",
+      name: "role",
+      choices: [
+        "Engineer",
+        new inquirer.Separator(),
+        "Intern",
+        new inquirer.Separator(),
+        "Done - assemble development team"
+      ]
+    }
+  ];
+
+const managerInquiries = [
+    {
+      type: "input",
+      message: "What is the manager's name?",
+      name: "name"
+    },
+    {
+      type: "input",
+      message: "What is the manager's email?",
+      name: "email"
+    },
+    {
+      type: "number",
+      message: "What is the manager's employee ID number?",
+      name: "id"
+    },
+    {
+      type: "number",
+      message: "What is the manager's office number?",
+      name: "officenumber"
+    }
+];
+
+const engineerInquiries = [
+    {
+        type: "input",
+        message: "What is the engineer's name?",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "What is the engineer's email?",
+        name: "email"
+    },
+    {
+        type: "number",
+        message: "What is the engineer's employee ID number?",
+        name: "id"
+    },
+    {
+        type: "input",
+        message: "What is this engineer's GitHub username?",
+        name: "github"
+    }
+];
+
+const internInquiries = [
+    {
+        type: "input",
+        message: "What is the intern's name?",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "What is the intern's email?",
+        name: "email"
+    },
+    {
+        type: "number",
+        message: "What is the intern's employee ID number?",
+        name: "id"
+    },
+    {
+        type: "input",
+        message: "What school did this intern attend?",
+        name: "school"
+    }
+];
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-​inquirer
-    .prompt([
-        {
-            type: "input",
-            message: "What is the Manager's name?",
-            name: "managerName"
-        },
-        {
-            type: "input",
-            message: "What is the Manager's ID number?",
-            name: "managerId"
-        },
-        {
-            type: "input",
-            message: "What is the Manager's email?",
-            name: "managerEmail"
-        },
-        {
-            type: "input",
-            message: "What is the Manager's office number?",
-            name: "managerOfficeNumber"
-        }
-    ])
+
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
