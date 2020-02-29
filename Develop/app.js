@@ -29,7 +29,7 @@ const render = require("./lib/htmlRenderer");
             type: "input",
             message: "What is the Manager's email?",
             name: "managerEmail"
-        }
+        },
         {
             type: "input",
             message: "What is the Manager's office number?",
