@@ -1,151 +1,145 @@
-const inquirer = require("inquirer");
-const fs = require("fs");
-const path = require("path");
-const util = require("util");
-const writeFile = util.promisify(fs.writeFile);
-const readFile = util.promisify(fs.readFile);
-const generateHtml = require("./output/teamHTML");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
+const inquirer = require("inquirer");
+const path = require("path");
+const fs = require("fs");
+​
+const OUTPUT_DIR = path.resolve(__dirname, "output")
+const outputPath = path.join(OUTPUT_DIR, "team.html");
+​
+const render = require("./lib/htmlRenderer");
+​
+​const employeeGroup = [];
 
-//Initial Prompt
-function menu() {
-    inquirer.prompt({
-       type: "list",
-       name: "choices",
-       message: "What would you like to do?",
-       choices: ["Add a manager", "Add an intern", "Add an engineer", "Exit and write HTML"]
-    }).then(answers => {
-        if (answers.choices === "Add a manager") {
-            promptManager()
-        };
-        if (answers.choices === "Add an intern") {
-            promptIntern()
-        };
-        if (answers.choices === "Add an engineer")  {
-            promptEngineer() 
-        };
-        if (answers.choices === "Exit and write HTML")  {
-            exit()
-        };
-    });
+function makeManager () {
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "managerName",
+      message: "Enter the manager's name."
+    },
+    {
+      type: "input",
+      name: "managerID",
+      message: "Enter the manager's ID"
+    },
+    {
+      type: "input",
+      name: "managerEmail",
+      message: "Enter the manager's email address."
+    },
+    {
+      type: "number",
+      name: "managerOffice",
+      message: "Enter the manager's office number."
+    },
+  ]).then(answers => {
+    console.log(answers);
+    const manager = new Manager (answers.managerName, answers.managerID, answers.managerEmail, answers.managerOffice);
+    console.log(manager);
+    employeeGroup.push(manager);
+    makeGroup();
+  });
+};
+function makeGroup() {
+  inquirer
+  .prompt([
+    {
+      type: "list",
+      name: "employeeType",
+      message: "What is the role of this employee?",
+      choices: ["Intern", "Engineer", "I don't need to add any more employees."],
+    }
+  ]).then(answers => {
+    switch (answers.employeeType) {
+      case "Intern":
+        console.log("intern");
+        makeIntern();
+        break;
+      case "Engineer":
+        console.log("engineer");
+        makeEngineer();
+        break;
+      default:
+        console.log("Assembling the group.");
+        assembleGroup();
+    };
+  });
 };
 
-//Manager Questions
-promptManager = () => {
-    return inquirer.prompt([
-        {
-            type: "input",
-            name: "name",
-            message: "Please enter the manager's name."
-        },
-        {
-            type: "input",
-            name: "id",
-            message: "Enter your ID."
-        },
-        {
-            type: "input",
-            name: "email",
-            message: "Enter your email."
-        },
-        {
-            type: "input",
-            name: "officeNumber",
-            message: "Enter your office Number."
-        },
-    ]).then(manager => {
-      let managerHtml = `<div class="card"><h3><i class="fas fa-teeth-open"></i>&ensp;Manager</h3><h4>${manager.name}</h4><p>${manager.id}</p><p>${manager.email}</p><p>${manager.officeNumber}</p></div>`;
-            fs.appendFile("index.html", managerHtml, (err) => {
-                if (err) throw err;
-                console.log("manager added");
-                menu();
-        });
-    });          
+function makeEngineer () {
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "engineerName",
+      message: "Enter the engineer's name."
+    },
+    {
+      type: "input",
+      name: "engineerID",
+      message: "Enter the engineer's ID"
+    },
+    {
+      type: "input",
+      name: "engineerEmail",
+      message: "Enter the engineer's email address."
+    },
+    {
+      type: "input",
+      name: "engineerGithub",
+      message: "Enter the engineer's GitHub."
+    },
+  ]).then(answers => {
+    console.log(answers);
+    const engineer = new Engineer (answers.engineerName, answers.engineerID, answers.engineerEmail, answers.engineerGithub);
+    console.log(engineer);
+    employeeGroup.push(engineer);
+    makeGroup();
+  });
 };
 
-//Intern Questions
-promptIntern = () => {
-    return inquirer.prompt([
-        {
-            type: "input",
-            name: "name",
-            message: "Please enter the intern's name."
-        },
-        {
-            type: "input",
-            name: "id",
-            message: "Please enter the intern's ID."
-        },
-        {
-            type: "input",
-            name: "email",
-            message: "Please enter the intern's email."
-        },
-        {
-            type: "input",
-            name: "school",
-            message: "Please enter the intern's school."
-        },
-    ]).then(intern => {
-        let internHtml = `<div class="card"><h3><i class="fas fa-graduation-cap"></i>&ensp;Intern</h3><h4>${intern.name}</h4><p>${intern.id}</p><p>${intern.email}</p><p>${intern.school}</p></div>`;
-        fs.appendFile("index.html", internHtml, 'utf8', (err) => {
-            if (err) throw err;
-            console.log("intern added");
-            menu();
-        });
-    });        
+function makeIntern () {
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "internName",
+      message: "Enter the intern's name."
+    },
+    {
+      type: "input",
+      name: "internID",
+      message: "Enter the intern's ID"
+    },
+    {
+      type: "input",
+      name: "internEmail",
+      message: "Enter the intern's email address."
+    },
+    {
+      type: "input",
+      name: "internSchool",
+      message: "Enter the intern's school."
+    },
+  ]).then(answers => {
+    console.log(answers);
+    const intern = new Intern (answers.internName, answers.internID, answers.internEmail, answers.internSchool);
+    console.log(intern);
+    employeeGroup.push(intern);
+    makeGroup();
+  });
 };
 
-//Engineer Questions
-promptEngineer = () => {
-    return inquirer.prompt([
-        {
-            type: "input",
-            name: "name",
-            message: "Please enter the engineer's name."
-        },
-        {
-            type: "input",
-            name: "id",
-            message: "Please enter the engineer's ID."
-        },
-        {
-            type: "input",
-            name: "email",
-            message: "Please enter the engineer's email."
-        },
-        {
-            type: "input",
-            name: "officeNumber",
-            message: "Please enter the engineer's GitHub profile."
-        },
-    ]).then(engineer => {
-        let engineerHtml = `<div class="card"><h3><i class="fas fa-pencil-alt"></i>&ensp;Engineer</h3><h4>${engineer.name}</h4><p>${engineer.id}</p><p>${engineer.email}</p><p>${engineer.github}</p></div>`;
-        
-            fs.appendFile("index.html", engineerHtml, (err) => {
-                if (err) throw err;
-                console.log("engineer added");
-                menu();
-            });
-        });         
+function assembleGroup() {
+  fs.writeFileSync(outputPath, render(employeeGroup), "utf-8");
 };
-
-
-//Exit and write HTML
-exit = () =>    {
-    let footer = `</div> </html>`;
-    fs.appendFile("index.html", footer, (err) => {
-        if (err) throw err;
-                console.log("html ended");
-    })
-}
-
-menu();
+makeManager();
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-
+​
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
@@ -165,3 +159,4 @@ menu();
 // for further information. Be sure to test out each class and verify it generates an 
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work!```
+
