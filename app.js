@@ -1,24 +1,25 @@
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
+
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 ​
-const OUTPUT_DIR = path.resolve(__dirname, "output")
-const outputPath = path.join(OUTPUT_DIR, "team.html");
+// const OUTPUT_DIR = path.resolve(__dirname, "output")
+const outputPath = path.resolve(__dirname, "output", "team.html");
 ​
 const render = require("./lib/htmlRenderer");
 ​
 ​const employeeGroup = [];
 
-function makeManager () {
+function makeManager() {
   inquirer
   .prompt([
     {
       type: "input",
       name: "managerName",
-      message: "Enter the manager's name."
+      message: "Enter the manager's name"
     },
     {
       type: "input",
@@ -28,12 +29,12 @@ function makeManager () {
     {
       type: "input",
       name: "managerEmail",
-      message: "Enter the manager's email address."
+      message: "Enter the manager's email address"
     },
     {
-      type: "number",
+      type: "input",
       name: "managerOffice",
-      message: "Enter the manager's office number."
+      message: "Enter the manager's office number"
     },
   ]).then(answers => {
     console.log(answers);
@@ -69,13 +70,13 @@ function makeGroup() {
   });
 };
 
-function makeEngineer () {
+function makeEngineer() {
   inquirer
   .prompt([
     {
       type: "input",
       name: "engineerName",
-      message: "Enter the engineer's name."
+      message: "Enter the engineer's name"
     },
     {
       type: "input",
@@ -85,12 +86,12 @@ function makeEngineer () {
     {
       type: "input",
       name: "engineerEmail",
-      message: "Enter the engineer's email address."
+      message: "Enter the engineer's email address"
     },
     {
       type: "input",
       name: "engineerGithub",
-      message: "Enter the engineer's GitHub."
+      message: "Enter the engineer's GitHub"
     },
   ]).then(answers => {
     console.log(answers);
@@ -101,13 +102,13 @@ function makeEngineer () {
   });
 };
 
-function makeIntern () {
+function makeIntern() {
   inquirer
   .prompt([
     {
       type: "input",
       name: "internName",
-      message: "Enter the intern's name."
+      message: "Enter the intern's name"
     },
     {
       type: "input",
@@ -117,12 +118,12 @@ function makeIntern () {
     {
       type: "input",
       name: "internEmail",
-      message: "Enter the intern's email address."
+      message: "Enter the intern's email address"
     },
     {
       type: "input",
       name: "internSchool",
-      message: "Enter the intern's school."
+      message: "Enter the intern's school"
     },
   ]).then(answers => {
     console.log(answers);
