@@ -24,6 +24,7 @@
     "check-dependencies": "^1.1.0",
     "fs": "0.0.1-security",
     "inquirer": "^7.0.5",
+    "jest": "^25.1.0",
     "path": "^0.12.7"
   }
 }
